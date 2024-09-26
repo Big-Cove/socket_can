@@ -1,8 +1,8 @@
-defmodule SocketCanTest do
+defmodule SocketCANTest do
   use ExUnit.Case
-  doctest SocketCan
+  doctest SocketCAN
 
   test "greets the world" do
-    assert SocketCan.hello() == :world
+    assert SocketCAN.hello() == :world
   end
 end

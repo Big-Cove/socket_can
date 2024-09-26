@@ -1,11 +1,11 @@
-defmodule SocketCan.MixProject do
+defmodule SocketCAN.MixProject do
   use Mix.Project
 
   def project do
     [
       app: :socket_can,
       version: "0.1.0",
-      elixir: "~> 1.17",
+      elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]

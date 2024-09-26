@@ -1,18 +1,22 @@
-defmodule SocketCan do
+defmodule SocketCAN do
   @moduledoc """
-  Documentation for `SocketCan`.
+  Documentation for `SocketCAN`.
   """
 
-  @doc """
-  Hello world.
+  defdelegate child_spec(opts), to: SocketCAN.Supervisor
 
-  ## Examples
+  def send_frame(socket_can, %SocketCAN.Frame{} = frame, opts \\ []) do
+    timeout = opts[:timeout] || 1000
 
-      iex> SocketCan.hello()
-      :world
+    writer = Module.concat(socket_can, Writer)
 
-  """
-  def hello do
-    :world
+    with {:ok, frame_binary} <- SocketCAN.Frame.to_binary(frame) do
+      GenServer.call(writer, {:send, frame_binary, opts}, timeout)
+    end
+  end
+
+  def subscribe(socket_can, frame_id) do
+    Registry.register(socket_can, frame_id, nil)
+    :ok
   end
 end
