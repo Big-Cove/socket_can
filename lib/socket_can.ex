@@ -15,8 +15,35 @@ defmodule SocketCAN do
     end
   end
 
+  @doc """
+  Subscribe the calling process to receive frames with a specific ID.
+
+  ## Examples
+
+      SocketCAN.subscribe(MyCANBus, 0x123)
+  """
   def subscribe(socket_can, frame_id) do
-    Registry.register(socket_can, frame_id, nil)
-    :ok
+    case Registry.register(socket_can, frame_id, nil) do
+      {:ok, _} -> :ok
+      {:error, {:already_registered, _}} -> :ok
+    end
+  end
+
+  @doc """
+  Subscribe the calling process to receive all CAN frames.
+
+  ## Examples
+
+      SocketCAN.subscribe(MyCANBus)
+      
+      receive do
+        {:can_frame, frame} -> IO.inspect(frame)
+      end
+  """
+  def subscribe(socket_can) do
+    case Registry.register(socket_can, :all_frames, nil) do
+      {:ok, _} -> :ok
+      {:error, {:already_registered, _}} -> :ok
+    end
   end
 end
